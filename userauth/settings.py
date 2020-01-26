@@ -90,8 +90,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'rest_framework',
-
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,6 +124,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'userauth.wsgi.application'
 
@@ -175,3 +178,5 @@ USE_TZ = True
 MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

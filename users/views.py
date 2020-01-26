@@ -1,6 +1,5 @@
 import pdb
-from django.http import HttpResponseRedirect 
-from django.urls import reverse_lazy 
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
@@ -13,15 +12,16 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
+from .mail_verification import get_token_generator
 
 from .serializers import UserSerializer
 
-from .forms import UserCreationForm, UserUpdateForm   
+from .forms import UserCreationForm, UserUpdateForm
+
 User = get_user_model()
 
 
 class UserDetail(generics.RetrieveAPIView):
-    """ Detail endpoint for a single user """
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -29,7 +29,6 @@ class UserDetail(generics.RetrieveAPIView):
 
 
 class UserList(generics.ListAPIView):
-    """ List endpoint for detail on all users """
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -37,7 +36,6 @@ class UserList(generics.ListAPIView):
 
 
 class GetAuthToken(ObtainAuthToken):
-    """ Return authentication token for an authenticated user. """
 
     def post(self, request, *args, **kwargs):
         return self.login(request)
@@ -68,7 +66,6 @@ class GetAuthToken(ObtainAuthToken):
             return Response({"error": "Bad request"},
                             status=status.HTTP_400_BAD_REQUEST)
 
-#Added by tasleem
 class UserListView(ListView):
     template_name = 'user_list.html'
     model = User
@@ -95,7 +92,7 @@ class CreateUserView(CreateView):
             'uid': uid,
             'token': token,
         })
-        user.email_user('account activation mail', message, 'inven@inventree.com')
+        user.email_user('account activation mail', message, 'tasleem@gmail.com')
 
         return JsonResponse({'message': 'User created'})
 
@@ -122,3 +119,16 @@ class UpdateUserView(UpdateView):
     template_name = 'user_form.html'
     form_class = UserUpdateForm
     success_url = reverse_lazy('user-list')
+    # pk_url_kwarg = 'pk'
+
+
+class DeleteUserView(DeleteView):
+    model = User
+    success_url = reverse_lazy('user-list')
+    template_name = 'user_delete.html'
+
+    def form_valid(self, form):
+        _username = form.cleaned_data.get('username')
+        pdb.set_trace()
+        User.objects.get(username=_username).delete()
+        super().form_valid(form)

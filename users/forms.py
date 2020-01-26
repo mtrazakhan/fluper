@@ -10,7 +10,7 @@ class UserCreationForm(AuthUserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name','email')
+        fields = ('username','first_name', 'last_name','email','job_role', 'user_type')
 
 
 class UserUpdateForm(forms.ModelForm):

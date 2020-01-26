@@ -1,25 +1,47 @@
+<title>
+{% block page_title %}
+Fluper User Management
+{% endblock %}
+</title>
+
 {% block content %}
-
-<div>
-    {% for u in user_list %}
+<table style="width:100%">
     <div>
-        {{u.pk}}
-        {{ u.first_name }}
-        {{u.last_name}}
-        {{u.email}}
-        {{u.is_active}}
-        <a href="{% url 'update-user' u.pk %}">edit</a>
-        <a href="{% url 'delete-user' u.pk %}">delete</a>
+        <thead>
+            <tr>
+                <td>User ID</td>
+                <td>Username</td>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Email id</td>
+                <td>Job Role</td>
+                <td>User Type</td>
+                <td>Is Active</td>
+                <td>Actions</td>
+            </tr>
+        </thead>
     </div>
-    {% endfor %}
-    <div>
-       Filter
-       By User Type
-    </div>
+    <br>
+        {% for u in user_list %}
+            <tr>
+                <td>{{u.pk}}</td>
+                <td>{{u.username}}</td>
+                <td>{{ u.first_name }}</td>
+                <td>{{u.last_name}}</td>
+                <td>{{u.email}}</td>
+                <td>{{u.job_role}}</td>
+                <td>{{u.user_type}}</td>
+                <td>{{u.is_active}}</td>
 
-</div>
-
-   <a href="{% url 'create-user' %}">Create User</a>
+                <td>
+                <button type="button" class="btn btn-primary"><a href="{% url 'update-user' u.pk %}">Edit</a></button>
+                <button type="button" class="btn btn-danger"><a href="{% url 'delete-user' u.pk %}">Delete</a></button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+</table>
+<button type="button" class="btn btn-danger"><a href="{% url 'create-user' %}">Create New User</a></button>
 
 <script>
      function delete_form(id){
@@ -28,4 +50,24 @@
        console.log(id);
     }
 </script>
-    {% endblock %}
+<style
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+
+{% endblock %}
+
+
